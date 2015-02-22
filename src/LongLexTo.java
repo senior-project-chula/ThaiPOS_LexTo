@@ -341,10 +341,12 @@ public class LongLexTo {
 	/*************************** Demo *******************************/
 	/****************************************************************/
 	public static void main(String[] args) throws IOException {
-		LongLexTo tokenizer=new LongLexTo(new File("D:\\LUNAworkspace2\\LexTo_works\\dict\\lexitron-tagged-utf2.txt"));
+		LongLexTo tokenizer=new LongLexTo(new File(".\\dict\\lexitron-tagged-utf2.txt"));
 //		File unknownFile=new File("unknown.txt");
 //		if(unknownFile.exists())
 //			tokenizer.addDict(unknownFile);
+		tokenizer.addDict(new File(".\\dict\\englishdict.txt"));
+		tokenizer.addDict(new File(".\\dict\\thaidict.txt"));
 		Vector typeList;
 		Vector typeListPOS;
 		Vector typeListStockPOS;
