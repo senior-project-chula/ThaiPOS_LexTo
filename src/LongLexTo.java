@@ -42,7 +42,7 @@ public class LongLexTo {
 	private Vector typeListPOS;   //List of word POS types (for word only)
 	private Vector typeListStockPOS; //List of word StockPOS types (for word only)
 	private Iterator iter;     //Iterator for indexList OR lineList (depends on the call)
-	
+
 
 	/*******************************************************************/
 	/*********************** Return index list *************************/
@@ -105,8 +105,8 @@ public class LongLexTo {
 		dict=new Trie();
 		if(dictFile.exists()){
 			addDict(dictFile);
-			addDict(new File(".\\dict\\stockenglishdict.txt"));
-			addDict(new File(".\\dict\\englishdict.txt"));
+//			addDict(new File(".\\dict\\stockenglishdict.txt"));
+//			addDict(new File(".\\dict\\englishdict.txt"));
 		}
 		else
 			System.out.println(" !!! Error: The dictionary file is not found, " + dictFile.getName());
@@ -137,19 +137,19 @@ public class LongLexTo {
 
 		while((line=br.readLine())!=null) {
 			line=line.trim();
-			
-			
+
+
 			//			System.out.println(word2);
 			if(line.length()>0)
 				wordlist=line.split(" ");
-				try{
-					dict.add(wordlist[0],POSToInt(wordlist[1]),StockPOSToInt(wordlist[2]));
-				}catch(Exception e){
-//					System.out.println(wordlist[0]);
-					dict.add(wordlist[0],POSToInt(wordlist[1]),100);
-				}
-				//				System.out.println(line);
-				
+			try{
+				dict.add(wordlist[0],POSToInt(wordlist[1]),StockPOSToInt(wordlist[2]));
+			}catch(Exception e){
+				//					System.out.println(wordlist[0]);
+				dict.add(wordlist[0],POSToInt(wordlist[1]),100);
+			}
+			//				System.out.println(line);
+
 			//				dict.add(word,word2);
 			//				dict.add(line);
 		}
@@ -190,8 +190,8 @@ public class LongLexTo {
 				typeListStockPOS.addElement(typeresult[2]);
 			}
 			//Digits
-			else if(((ch>='0')&&(ch<='9'))||((ch>='�')&&(ch<='�'))) {
-				while((pos<text.length())&&(((ch>='0')&&(ch<='9'))||((ch>='�')&&(ch<='�'))||(ch==',')||(ch=='.')))
+			else if(((ch>='0')&&(ch<='9'))||((ch>='๑')&&(ch<='๙'))) {
+				while((pos<text.length())&&(((ch>='0')&&(ch<='9'))||((ch>='๑')&&(ch<='๙'))||(ch=='.')))
 					ch=text.charAt(pos++);
 				if(pos<text.length())
 					pos--;
@@ -304,6 +304,19 @@ public class LongLexTo {
 		}
 		return 10;
 	}//POSToInt
+	//IntToPOS
+	public String IntToPOS(int i){
+		if(i==11){//NCMN
+			return "NCMN";
+		}
+		if(i==12){//NPRP
+			return "NPRP";
+		}
+		if(i==13){//VACT
+			return "VACT";
+		}
+		return "UNK";
+	}//IntToPOS
 	// StockPOSToInt
 	public int StockPOSToInt(String s){
 		if(s.compareTo("S")==0){//sell
@@ -342,121 +355,53 @@ public class LongLexTo {
 		if(s.compareTo("CNT")==0){//connecting (need words following)
 			return 112;
 		}
+		if(s.compareTo("STOCK")==0){//connecting (need words following)
+			return 199;
+		}
 		return 100;
 	}//StockPOSToInt
-	/****************************************************************/
-	/*************************** Demo *******************************/
-	/****************************************************************/
-	public static void main(String[] args) throws IOException {
-		String inputpath =  "D:\\stockanalysis\\sample\\19_utf.txt";
-		File inFile, outFile;
-		//		FileReader fr;
-		FileInputStream fr;
-		BufferedReader br;
-		FileWriter fw;
-		LongLexTo tokenizer=new LongLexTo(new File(".\\dict\\lexitron-tagged-utf2.txt"));
-//		File unknownFile=new File("unknown.txt");
-//		if(unknownFile.exists())
-//			tokenizer.addDict(unknownFile);
-		Vector typeList;
-		Vector typeListPOS;
-		Vector typeListStockPOS;
-		String text="", line, inFileName, outFileName;
-		char ch;
-		int begin, end, type,typePOS,typeStockPOS; 
+	//IntToStockPOS
+	public static String IntToStockPOS(int i){
+		if(i==101){//sell
+			return "S";
+		}
+		if(i==102){//buy
+			return "B";
+		}
+		if(i==103){//hold
+			return "H";
+		}
+		if(i==104){//positive
+			return "P";
+		}
+		if(i==105){//negative
+			return "N";
+		}
+		if(i==106){//not pos not neg
+			return "NP";
+		}
+		if(i==107){//ambiguous
+			return "AM";
+		}
+		if(i==108){//future's word
+			return "FT";
+		}
+		if(i==109){//past's word
+			return "PT";
+		}
+		if(i==110){//curent time's word
+			return "CT";
+		}
+		if(i==111){//invert ex. but
+			return "INV";
+		}
+		if(i==112){//connecting (need words following)
+			return "CNT";
+		}
+		if(i==199){//connecting (need words following)
+			return "STOCK";
+		}
+		return "UNK";
+	}//IntToStockPOS
 
-
-
-		BufferedReader streamReader = new BufferedReader(new InputStreamReader(System.in)); 
-
-		System.out.println("\n\n*******************************");
-		System.out.println("*** LexTo: Lexeme Tokenizer ***");
-		System.out.println("*******************************");
-		//    do {      
-		//Get input file name
-		//      do {
-		//      	System.out.print("\n >>> Enter input file ('q' to quit): ");
-		//        inFileName=(streamReader.readLine()).trim();
-		//        if(inFileName.equals("q"))
-		//          System.exit(1);
-		//        inFile=new File(System.getProperty("user.dir") + "//" + inFileName);
-		//      } while(!inFile.exists());
-		//      
-		//Get output file name
-//		System.out.print(" >>> Enter output file (.html only): ");
-//		outFileName=(streamReader.readLine()).trim();
-		outFile=new File(inputpath.substring(0, inputpath.indexOf("."))+"_word.html");
-
-		//		fr=new FileReader("D:\\LUNAworkspace2\\LexTo_works\\1xpdf.txt");
-		//		br=new BufferedReader(fr);
-		fr = new FileInputStream(new File(inputpath));
-		InputStreamReader isr = new InputStreamReader(fr,"Utf-8");
-		br=new BufferedReader(isr);
-		fw=new FileWriter(outFile); 
-		while((line=br.readLine())!=null) {
-			line=line.trim();
-//			while(true){
-//				int charp= line.indexOf("#");
-//				if(charp<0){
-//					break;
-//				}
-//				line=line.substring(0, charp)+"à¹‰"+line.substring(charp+1);
-//			}
-			if(line.length()>0) {
-
-				fw.write("<b>Text:</b> " + line);
-				fw.write("<br>\n");
-
-				fw.write("<b>Word instance:</b> ");
-				tokenizer.wordInstance(line);
-				typeList=tokenizer.getTypeList();
-				typeListPOS=tokenizer.getTypeListPOS();
-				typeListStockPOS=tokenizer.getTypeListStockPOS();
-				//				System.out.println(typeList.size());
-				//				System.out.println(typeListPOS.size());
-				begin=tokenizer.first();
-				int i=0;
-				while(tokenizer.hasNext()) {
-					end=tokenizer.next();
-					type=((Integer)typeList.elementAt(i)).intValue();
-					typePOS=((Integer)typeListPOS.elementAt(i)).intValue();
-					typeStockPOS=((Integer)typeListStockPOS.elementAt(i)).intValue();
-					i+=1;
-					if(type==0)
-						fw.write("<font color=#ff0000>(" +typePOS+")("+typeStockPOS+")"+ line.substring(begin, end) + "</font>");
-					else if(type==1)
-						fw.write("<font color=#00bb00>(" +typePOS+")("+typeStockPOS+")"+ line.substring(begin, end) + "</font>");
-					else if(type==2)
-						fw.write("<font color=#0000bb>(" +typePOS+")("+typeStockPOS+")"+ line.substring(begin, end) + "</font>");
-					else if(type==3)
-						fw.write("<font color=#aa00aa>(" +typePOS+")("+typeStockPOS+")"+ line.substring(begin, end) + "</font>");
-					else if(type==4)
-						fw.write("<font color=#00aaaa>(" +typePOS+")("+typeStockPOS+")"+ line.substring(begin, end) + "</font>");
-					fw.write("<font color=#000000>|</font>");
-					begin=end;
-				}
-				fw.write("<br>\n");
-
-				fw.write("<b>Line instance:</b> ");
-				tokenizer.lineInstance(line);    
-				begin=tokenizer.first();
-				while(tokenizer.hasNext()) {
-					end=tokenizer.next();
-					fw.write(line.substring(begin, end) + "<font color=#ff0000>|</font>");
-					begin=end;
-				}
-				fw.write("<br><br>\n");        
-			}
-		} //while all line
-		fw.write("<hr>");
-		fw.write("<font color=#ff0000>unknown</font> | ");
-		fw.write("<font color=#00bb00>known</font> | ");
-		fw.write("<font color=#0000bb>ambiguous</font> | ");
-		fw.write("<font color=#a00aa>English/Digits</font> | ");
-		fw.write("<font color=#00aaaa>special</font>\n");
-		fr.close();
-		fw.close();
-		System.out.println("\n *** Status: Use Web browser to view result: " + outFile.getName());
-		//    } while(true);
-	} //main
 }
