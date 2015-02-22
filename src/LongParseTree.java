@@ -46,7 +46,7 @@ public class LongParseTree {
 		endingChar=new Vector();
 
 		//Adding front-dependent characters
-		//    frontDepChar.addElement("�"); frontDepChar.addElement("�"); frontDepChar.addElement("�"); 
+		//	    frontDepChar.addElement("�"); frontDepChar.addElement("�"); frontDepChar.addElement("�"); 
 		//    frontDepChar.addElement("�"); frontDepChar.addElement("�"); frontDepChar.addElement("�"); 
 		//    frontDepChar.addElement("�"); frontDepChar.addElement("�"); frontDepChar.addElement("�"); 
 		//    frontDepChar.addElement("�"); frontDepChar.addElement("�"); frontDepChar.addElement("�"); 
@@ -74,7 +74,7 @@ public class LongParseTree {
 
 		//Adding ending characters
 		//    endingChar.addElement("�"); endingChar.addElement("�");    
-		endingChar.addElement("ๆ"); endingChar.addElement("ฯ");    
+		endingChar.addElement("ๆ"); endingChar.addElement("ฯ"); 
 	}
 	public LongParseTree(Trie dict, Vector indexList, Vector typeList, Vector typeListPOS, Vector typeListStockPOS) throws IOException {
 
@@ -90,7 +90,7 @@ public class LongParseTree {
 		endingChar=new Vector();
 
 		//Adding front-dependent characters
-		//    frontDepChar.addElement("�"); frontDepChar.addElement("�"); frontDepChar.addElement("�"); 
+		//	    frontDepChar.addElement("�"); frontDepChar.addElement("�"); frontDepChar.addElement("�"); 
 		//    frontDepChar.addElement("�"); frontDepChar.addElement("�"); frontDepChar.addElement("�"); 
 		//    frontDepChar.addElement("�"); frontDepChar.addElement("�"); frontDepChar.addElement("�"); 
 		//    frontDepChar.addElement("�"); frontDepChar.addElement("�"); frontDepChar.addElement("�"); 
@@ -118,7 +118,7 @@ public class LongParseTree {
 
 		//Adding ending characters
 		//    endingChar.addElement("�"); endingChar.addElement("�");    
-		endingChar.addElement("ๆ"); endingChar.addElement("ฯ");    
+		endingChar.addElement("ๆ"); endingChar.addElement("ฯ");     
 	}
 
 	/****************************************************************/
@@ -170,8 +170,8 @@ public class LongParseTree {
 		statusarray[2]=100;
 		numValidPos=0;
 		pos=beginPos+1;
-		while((pos<=text.length())&&(status!=-1)) {
-//			status=dict.contains(text.substring(beginPos, pos));
+		while((pos<=text.length())&&(statusarray[0]!=-1)) {
+			//			status=dict.contains(text.substring(beginPos, pos));
 			statusarray=dict.containsStockPOS(text.substring(beginPos, pos));
 
 			//Record longest so far

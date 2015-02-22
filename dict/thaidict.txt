@@ -1,4 +1,3 @@
-ก NLBL
 ก. NCMN
 กก NCMN
 กงเต็ก NCMN
@@ -4104,7 +4103,6 @@
 ภูมิใจ VSTA
 ภู่วรรณ NPRP
 ภู่วรวรรณ NPRP
-ม NCMN
 ม-ม้า NCMN
 ม. CMTR
 ม.ม CMTR

@@ -103,8 +103,11 @@ public class LongLexTo {
 	public LongLexTo(File dictFile) throws IOException {
 
 		dict=new Trie();
-		if(dictFile.exists())
+		if(dictFile.exists()){
 			addDict(dictFile);
+			addDict(new File(".\\dict\\stockenglishdict.txt"));
+			addDict(new File(".\\dict\\englishdict.txt"));
+		}
 		else
 			System.out.println(" !!! Error: The dictionary file is not found, " + dictFile.getName());
 		indexList=new Vector();
@@ -142,6 +145,7 @@ public class LongLexTo {
 				try{
 					dict.add(wordlist[0],POSToInt(wordlist[1]),StockPOSToInt(wordlist[2]));
 				}catch(Exception e){
+//					System.out.println(wordlist[0]);
 					dict.add(wordlist[0],POSToInt(wordlist[1]),100);
 				}
 				//				System.out.println(line);
@@ -160,10 +164,11 @@ public class LongLexTo {
 		typeList.clear();  
 		typeListPOS.clear();
 		typeListStockPOS.clear();   
-		int pos, index;
+		int oldpos,pos, index;
 		String word;
 		boolean found;
 		char ch;
+		int[] typeresult=new int[3];
 
 		pos=0;
 		while(pos<text.length()) {
@@ -173,14 +178,16 @@ public class LongLexTo {
 
 			//English
 			if(((ch>='A')&&(ch<='Z'))||((ch>='a')&&(ch<='z'))) {
+				oldpos=pos;
 				while((pos<text.length())&&(((ch>='A')&&(ch<='Z'))||((ch>='a')&&(ch<='z'))))
 					ch=text.charAt(pos++);
 				if(pos<text.length())
 					pos--;
+				typeresult=dict.containsStockPOS(text.substring(oldpos, pos));
 				indexList.addElement(new Integer(pos));
-				typeList.addElement(new Integer(3));
-				typeListPOS.addElement(new Integer(10));
-				typeListStockPOS.addElement(new Integer(100));
+				typeList.addElement(typeresult[0]);
+				typeListPOS.addElement(typeresult[1]);
+				typeListStockPOS.addElement(typeresult[2]);
 			}
 			//Digits
 			else if(((ch>='0')&&(ch<='9'))||((ch>='�')&&(ch<='�'))) {
@@ -201,7 +208,7 @@ public class LongLexTo {
 				typeListPOS.addElement(new Integer(10));
 				typeListStockPOS.addElement(new Integer(100));
 			}
-			//Thai word (known/unknown/ambiguous)
+			//Thai word (known/unknown/ambiguous) + ENGLISH
 			else
 				pos=ptree.parseWordInstance(pos, text);
 		} //While all text length
@@ -341,12 +348,16 @@ public class LongLexTo {
 	/*************************** Demo *******************************/
 	/****************************************************************/
 	public static void main(String[] args) throws IOException {
+		String inputpath =  "D:\\stockanalysis\\sample\\19_utf.txt";
+		File inFile, outFile;
+		//		FileReader fr;
+		FileInputStream fr;
+		BufferedReader br;
+		FileWriter fw;
 		LongLexTo tokenizer=new LongLexTo(new File(".\\dict\\lexitron-tagged-utf2.txt"));
 //		File unknownFile=new File("unknown.txt");
 //		if(unknownFile.exists())
 //			tokenizer.addDict(unknownFile);
-		tokenizer.addDict(new File(".\\dict\\englishdict.txt"));
-		tokenizer.addDict(new File(".\\dict\\thaidict.txt"));
 		Vector typeList;
 		Vector typeListPOS;
 		Vector typeListStockPOS;
@@ -354,11 +365,6 @@ public class LongLexTo {
 		char ch;
 		int begin, end, type,typePOS,typeStockPOS; 
 
-		File inFile, outFile;
-		//		FileReader fr;
-		FileInputStream fr;
-		BufferedReader br;
-		FileWriter fw;
 
 
 		BufferedReader streamReader = new BufferedReader(new InputStreamReader(System.in)); 
@@ -377,13 +383,13 @@ public class LongLexTo {
 		//      } while(!inFile.exists());
 		//      
 		//Get output file name
-		System.out.print(" >>> Enter output file (.html only): ");
-		outFileName=(streamReader.readLine()).trim();
-		outFile=new File(System.getProperty("user.dir") + "//" + outFileName);
+//		System.out.print(" >>> Enter output file (.html only): ");
+//		outFileName=(streamReader.readLine()).trim();
+		outFile=new File(inputpath.substring(0, inputpath.indexOf("."))+"_word.html");
 
 		//		fr=new FileReader("D:\\LUNAworkspace2\\LexTo_works\\1xpdf.txt");
 		//		br=new BufferedReader(fr);
-		fr = new FileInputStream(new File("D:\\stockanalysis\\sample\\19_utf.txt"));
+		fr = new FileInputStream(new File(inputpath));
 		InputStreamReader isr = new InputStreamReader(fr,"Utf-8");
 		br=new BufferedReader(isr);
 		fw=new FileWriter(outFile); 
@@ -394,7 +400,7 @@ public class LongLexTo {
 //				if(charp<0){
 //					break;
 //				}
-//				line=line.substring(0, charp)+"้"+line.substring(charp+1);
+//				line=line.substring(0, charp)+"à¹‰"+line.substring(charp+1);
 //			}
 			if(line.length()>0) {
 
@@ -450,7 +456,7 @@ public class LongLexTo {
 		fw.write("<font color=#00aaaa>special</font>\n");
 		fr.close();
 		fw.close();
-		System.out.println("\n *** Status: Use Web browser to view result: " + outFileName);
+		System.out.println("\n *** Status: Use Web browser to view result: " + outFile.getName());
 		//    } while(true);
 	} //main
 }
