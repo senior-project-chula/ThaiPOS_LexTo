@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.Vector;
 public class Test {
 	public static void main(String[] args) throws IOException {
-		int version = 0;
+		int version = 1;
 		try{
 			version = Integer.parseInt(args[0]);
 		}catch(Exception e){
@@ -51,11 +51,14 @@ public class Test {
 		String StypePOS,StypeStockPOS;
 		
 		String line;
+		fw.write("<html>");
+		fw.write("<body>");
 		while((line=br.readLine())!=null) {
 			line=line.trim();
 			if(line.length()>0) {
+				fw.write("<line>");
 				fw.write("<full>"+line+"</full>");
-				fw.write("<br>\n");
+				fw.write("<br/>\n");
 				fw.write("<words>");
 				tokenizer.wordInstance(line);
 				typeList=tokenizer.getTypeList();
@@ -74,44 +77,28 @@ public class Test {
 					i+=1;
 					if(version==0){
 						if(type==0||type==-1)
-							fw.write("<font color=#ff0000><" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypePOS+"></"+StypeStockPOS+"></font>");
+							fw.write("<font color=#ff0000><" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypeStockPOS+"></"+StypePOS+"></font>");
 						else if(type==1)
-							fw.write("<font color=#00bb00><" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypePOS+"></"+StypeStockPOS+"></font>");
+							fw.write("<font color=#00bb00><" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypeStockPOS+"></"+StypePOS+"></font>");
 						else if(type==2)
-							fw.write("<font color=#0000bb><" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypePOS+"></"+StypeStockPOS+"></font>");
+							fw.write("<font color=#0000bb><" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypeStockPOS+"></"+StypePOS+"></font>");
 						else if(type==3)
-							fw.write("<font color=#aa00aa><" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypePOS+"></"+StypeStockPOS+"></font>");
+							fw.write("<font color=#aa00aa><" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypeStockPOS+"></"+StypePOS+"></font>");
 						else if(type==4)
-							fw.write("<font color=#00aaaa><" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypePOS+"></"+StypeStockPOS+"></font>");
+							fw.write("<font color=#00aaaa><" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypeStockPOS+"></"+StypePOS+"></font>");
 						fw.write("<font color=#000000>|</font>");
 					}else{
-						if(type==0||type==-1)
-							fw.write("<" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypePOS+"></"+StypeStockPOS+">");
-						else if(type==1)
-							fw.write("<" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypePOS+"></"+StypeStockPOS+">");
-						else if(type==2)
-							fw.write("<" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypePOS+"></"+StypeStockPOS+">");
-						else if(type==3)
-							fw.write("<" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypePOS+"></"+StypeStockPOS+">");
-						else if(type==4)
-							fw.write("<" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypePOS+"></"+StypeStockPOS+">");
+						fw.write("<" +StypePOS+"><"+StypeStockPOS+">"+ line.substring(begin, end) + "</" +StypeStockPOS+"></"+StypePOS+">");
 					}
 					begin=end;
 				}
-				fw.write("</words><br>");
-				fw.write("<br>\n");
-
-//				fw.write("<b>Line instance:</b> ");
-//				tokenizer.lineInstance(line);    
-//				begin=tokenizer.first();
-//				while(tokenizer.hasNext()) {
-//					end=tokenizer.next();
-//					fw.write(line.substring(begin, end) + "<font color=#ff0000>|</font>");
-//					begin=end;
-//				}
-//				fw.write("<br><br>\n");        
+				fw.write("</words><br/>");
+				fw.write("</line>");
+				fw.write("<br/>\n");   
 			}
 		} //while all line
+		fw.write("</body>");
+		fw.write("</html>");
 		if(version==0){
 			fw.write("<hr>");
 			fw.write("<font color=#ff0000>unknown</font> | ");
