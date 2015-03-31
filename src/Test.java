@@ -8,15 +8,7 @@ import java.util.Scanner;
 import java.util.Vector;
 public class Test {
 	public static void main(String[] args) throws IOException {
-		// version=0 -> show color (easy for human)
-		// version=1 -> not show color (xml => easy for the next process)
 		int version = 1;
-		// saveLongLexTo=0 -> not save
-		// saveLongLexTo=1 -> save
-		int saveLongLexTo=0;
-		// loadLongLexTo=0 -> not load
-		// loadLongLexTo=1 -> load
-		int loadLongLexTo=1;
 		try{
 			version = Integer.parseInt(args[0]);
 		}catch(Exception e){
@@ -26,20 +18,10 @@ public class Test {
 		// version=0 -> show color (easy for human)
 		// version=1 -> not show color (easy for next process)
 		
-		//get Tokenizer
-		LongLexTo tokenizer=null;
-		if(loadLongLexTo==1){
-			tokenizer=serializeLongLexTo.deserialzeLongLexTo(".\\dict\\LongLexTo.ser");
-		}else{
-			serializeLongLexTo serializer = new serializeLongLexTo(".\\dict\\lexitron-tagged-utf_stock.txt");
-			serializer.addDict(".\\dict\\stockenglishdict.txt");
-			serializer.addDict(".\\dict\\englishdict.txt");
-			if(saveLongLexTo==1){
-				serializer.save(".\\dict\\LongLexTo.ser");
-			}
-			//create Tokenizer and add the dictionary
-			tokenizer=serializer.getLongLexTo();
-		}
+		//create Tokenizer and add the dictionary
+		LongLexTo tokenizer=new LongLexTo(new File(".\\dict\\lexitron-tagged-utf_stock.txt"));
+		tokenizer.addDict(new File(".\\dict\\stockenglishdict.txt"));
+		tokenizer.addDict(new File(".\\dict\\englishdict.txt"));
 				
 		//get input file
 		String inputpath =  ".\\sample\\19_utf.txt";

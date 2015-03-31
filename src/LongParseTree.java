@@ -18,7 +18,7 @@
 import java.io.*;
 import java.util.*;
 
-public class LongParseTree implements Serializable{
+public class LongParseTree {
 
 	//Private variables
 	private Trie dict;               //For storing words from dictionary

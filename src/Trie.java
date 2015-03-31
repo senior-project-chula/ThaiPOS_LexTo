@@ -1,5 +1,3 @@
-import java.io.Serializable;
-
 /**
  * Licensed under the CC-GNU Lesser General Public License, Version 2.1 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,7 @@ import java.io.Serializable;
 //        dict.add(word, value);  //add word
 //        dict.contains(string);  //Check if contain string, return: freq if word, 0 if prefix, -1 otherwise
 
-public class Trie implements Serializable{
+public class Trie {
 
 	protected Trie parent=null;
 	protected Trie[] child=new Trie[1];

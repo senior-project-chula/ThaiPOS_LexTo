@@ -29,7 +29,7 @@
 import java.io.*;
 import java.util.*;
 
-public class LongLexTo implements Serializable{
+public class LongLexTo {
 
 	//Private variables
 	private Trie dict;               //For storing words from dictionary
@@ -43,15 +43,7 @@ public class LongLexTo implements Serializable{
 	private Vector typeListStockPOS; //List of word StockPOS types (for word only)
 	private Iterator iter;     //Iterator for indexList OR lineList (depends on the call)
 
-	/*******************************************************************/
-	/*********************** Return Dict and LongParseTree for serialization *************************/
-	/*******************************************************************/
-	public Trie getDict(){
-		return dict;
-	}
-	public LongParseTree getLongParseTree(){
-		return ptree;
-	}
+
 	/*******************************************************************/
 	/*********************** Return index list *************************/
 	/*******************************************************************/
@@ -113,6 +105,8 @@ public class LongLexTo implements Serializable{
 		dict=new Trie();
 		if(dictFile.exists()){
 			addDict(dictFile);
+//			addDict(new File(".\\dict\\stockenglishdict.txt"));
+//			addDict(new File(".\\dict\\englishdict.txt"));
 		}
 		else
 			System.out.println(" !!! Error: The dictionary file is not found, " + dictFile.getName());
@@ -151,6 +145,7 @@ public class LongLexTo implements Serializable{
 			try{
 				dict.add(wordlist[0],POSToInt(wordlist[1]),StockPOSToInt(wordlist[2]));
 			}catch(Exception e){
+				//					System.out.println(wordlist[0]);
 				dict.add(wordlist[0],POSToInt(wordlist[1]),100);
 			}
 			//				System.out.println(line);
@@ -358,17 +353,7 @@ public class LongLexTo implements Serializable{
 			return 111;
 		}
 		if(s.compareTo("CNT")==0){//connecting (need words following)
-			System.out.println("get cnt");
 			return 112;
-		}
-		if(s.compareTo("BCNT")==0){//curent time's word
-			return 113;
-		}
-		if(s.compareTo("FCNT")==0){//invert ex. but
-			return 114;
-		}
-		if(s.compareTo("STR")==0){//connecting (need words following)
-			return 115;
 		}
 		if(s.compareTo("STOCK")==0){//connecting (need words following)
 			return 199;
@@ -413,18 +398,10 @@ public class LongLexTo implements Serializable{
 		if(i==112){//connecting (need words following)
 			return "CNT";
 		}
-		if(i==113){//curent time's word
-			return "BCNT";
-		}
-		if(i==114){//invert ex. but
-			return "FCNT";
-		}
-		if(i==115){//connecting (need words following)
-			return "STR";
-		}
 		if(i==199){//connecting (need words following)
 			return "STOCK";
 		}
 		return "UNK";
-	}//IntToStockPOS]
+	}//IntToStockPOS
+
 }
